@@ -74,6 +74,17 @@ nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;st
 @keyframes rise{from{opacity:0;transform:translateY(18px) scale(.96)}}
 main[data-anim="1"] .rise{animation:rise .6s cubic-bezier(.2,.9,.25,1) both;animation-delay:calc(var(--i,0)*70ms)}
 @media (prefers-reduced-motion:reduce){main[data-anim="1"] .rise{animation:none}}
+.seg{display:flex;gap:4px;padding:5px;background:#ffffffaa;border:1px solid #fff;border-radius:99px;margin:12px 0 16px}
+.seg button{flex:1;border:0;border-radius:99px;padding:11px 0;background:none;font-size:15px;font-weight:700;font-family:inherit;color:var(--mute)}
+.seg button.on{background:var(--blue);color:#fff;box-shadow:0 8px 16px -8px #2a86cf}
+.doc{color:var(--ink);text-decoration:none}
+.chk{width:30px;height:30px;border-radius:50%;border:2px solid var(--blue);background:#fff;color:#fff;font-weight:800;flex:none}.chk.on{background:var(--blue)}
+.note.done{opacity:.55}.note.done .grow>div:first-child{text-decoration:line-through}
+.tc{position:relative}
+.dogb{position:absolute;top:12px;right:12px;width:52px;height:52px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 8px 18px -6px #0b2438aa;background:#fff}
+.cover .dogb{top:14px;right:14px;width:58px;height:58px}
+.sw{display:flex;justify-content:space-between;align-items:center;background:var(--glass);border:1px solid #fff;border-radius:18px;padding:14px 16px;margin:4px 0 12px;font-size:16px;color:var(--ink);font-weight:600}
+.sw input{width:28px;height:28px;margin:0;padding:0;accent-color:var(--blue)}
 </style>
 </head><body>
 <main id="app"></main><nav id="nav"></nav>
@@ -85,21 +96,23 @@ const SUPABASE_URL='https://pdsvduxnndyybavkzhmn.supabase.co', SUPABASE_KEY='sb_
 // =============================================================================================
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const S={me:null,prof:{},trips:[],photos:[],bk:[],urls:{},view:'home',arg:null,month:new Date()};
+const S={docs:[],notes:[],durls:{},ctab:'docs',me:null,prof:{},trips:[],photos:[],bk:[],urls:{},view:'home',arg:null,month:new Date()};
 const fmt=d=>d?new Date(d+'T00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}):'';
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3200)};
 const who=id=>S.prof[id]||{name:'?',color:'#999'};
+const avUrl=p=>p.avatar?sb.storage.from('avatars').getPublicUrl(p.avatar).data.publicUrl:'';
+const avatar=(p,c='')=>`<div class="av ${c}" style="background:${p.color}${p.avatar?`;background-image:url('${esc(avUrl(p))}');background-size:cover;background-position:center;color:transparent`:''}">${esc(p.name[0])}</div>`;
 const dot=id=>`<span class="dot" style="background:${who(id).color}"></span>${esc(who(id).name)}`;
 
 // ---------- Acceso: perfil + PIN (por debajo es Supabase Auth: email interno + PIN como contraseña) ----------
 async function login(){
   const {data:ps}=await sb.from('profiles').select('*').order('created_at');window._ps=ps||[];
   $('#nav').innerHTML='';
-  $('#app').innerHTML=`<div class="lg"><div class="banner"></div><div class="badge"><img src="logo.png"></div><h1>Nuestra Camper</h1><p class="mute">¿Quién viaja hoy?</p><div class="profiles">${_ps.map(p=>`<button onclick="pin('${p.id}')"><div class="av big" style="background:${p.color}">${esc(p.name[0])}</div>${esc(p.name)}</button>`).join('')}</div></div>`;
+  $('#app').innerHTML=`<div class="lg"><div class="banner"></div><div class="badge"><img src="logo.png"></div><h1>Nuestra Camper</h1><p class="mute">¿Quién viaja hoy?</p><div class="profiles">${_ps.map(p=>`<button onclick="pin('${p.id}')">${avatar(p,'big')}${esc(p.name)}</button>`).join('')}</div></div>`;
 }
 window.pin=id=>{window._pid=id;window._pv='';const p=_ps.find(x=>x.id===id);
-  $('#app').innerHTML=`<div class="lg pn"><button class="back" onclick="login()">‹</button><div class="av big" style="background:${p.color};margin:0 auto 10px">${esc(p.name[0])}</div><h1>${esc(p.name)}</h1><p class="mute">Escribe tu PIN</p><div class="dots" id="dots">${'<i></i>'.repeat(6)}</div><div class="pad">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k=>`<button ${k===''?'disabled style="visibility:hidden"':''} onclick="key('${k}')">${k}</button>`).join('')}</div></div>`};
+  $('#app').innerHTML=`<div class="lg pn"><button class="back" onclick="login()">‹</button><div style="display:flex;justify-content:center;margin-bottom:10px">${avatar(p,'big')}</div><h1>${esc(p.name)}</h1><p class="mute">Escribe tu PIN</p><div class="dots" id="dots">${'<i></i>'.repeat(6)}</div><div class="pad">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k=>`<button ${k===''?'disabled style="visibility:hidden"':''} onclick="key('${k}')">${k}</button>`).join('')}</div></div>`};
 window.key=async k=>{if(k==='⌫')_pv=_pv.slice(0,-1);else if(_pv.length<6)_pv+=k;
   const ds=document.querySelectorAll('#dots i');ds.forEach((d,i)=>d.classList.toggle('on',i<_pv.length));
   if(_pv.length===6){const p=_ps.find(x=>x.id===_pid);
@@ -109,10 +122,11 @@ window.logout=async()=>{await sb.auth.signOut();location.reload()};
 
 // ---------- Datos y tiempo real ----------
 async function load(){
-  const [p,t,ph,b]=await Promise.all([sb.from('profiles').select('*'),sb.from('trips').select('*').order('start_date',{ascending:false}),sb.from('photos').select('*').order('created_at',{ascending:false}),sb.from('bookings').select('*').order('start_date')]);
-  S.prof=Object.fromEntries((p.data||[]).map(x=>[x.id,x]));S.trips=t.data||[];S.photos=ph.data||[];S.bk=b.data||[];
+  const [p,t,ph,b,dc,nt]=await Promise.all([sb.from('profiles').select('*'),sb.from('trips').select('*').order('start_date',{ascending:false}),sb.from('photos').select('*').order('created_at',{ascending:false}),sb.from('bookings').select('*').order('start_date'),sb.from('docs').select('*').order('created_at',{ascending:false}),sb.from('notes').select('*').order('created_at',{ascending:false})]);
+  S.prof=Object.fromEntries((p.data||[]).map(x=>[x.id,x]));S.trips=t.data||[];S.photos=ph.data||[];S.bk=b.data||[];S.docs=dc.data||[];S.notes=nt.data||[];
   const need=S.photos.map(x=>x.path).filter(x=>!S.urls[x]);
   if(need.length){const {data}=await sb.storage.from('photos').createSignedUrls(need,3600);(data||[]).forEach(d=>S.urls[d.path]=d.signedUrl)}
+  const dn=S.docs.map(x=>x.path).filter(x=>!S.durls[x]);if(dn.length){const {data}=await sb.storage.from('docs').createSignedUrls(dn,21600);(data||[]).forEach(d=>S.durls[d.path]=d.signedUrl)}
 }
 async function boot(){
   const {data:{session}}=await sb.auth.getSession();if(!session)return login();
@@ -122,28 +136,28 @@ async function boot(){
 }
 window.go=(v,a=null)=>{S.view=v;S.arg=a;S.anim=1;render();scrollTo(0,0)};
 function render(){
-  const I={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',trips:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',gal:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/>',me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>'};
-  const tabs=[['home','Inicio'],['trips','Viajes'],['cal','Calendario'],['gal','Galería'],['me','Perfil']];
-  const on=k=>k==='cal'?['cal','bookForm'].includes(S.view):k==='trips'?['trips','trip','tripForm'].includes(S.view):S.view===k;
+  const I={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',trips:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',gal:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/>',camper:'<path d="M2 17V9a2 2 0 0 1 2-2h10l5 4 3 1v5H2z"/><circle cx="7" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/>'};
+  const tabs=[['home','Inicio'],['trips','Viajes'],['cal','Calendario'],['gal','Galería'],['camper','Camper']];
+  const on=k=>k==='cal'?['cal','bookForm'].includes(S.view):k==='trips'?['trips','trip','tripForm'].includes(S.view):k==='camper'?['camper','docForm'].includes(S.view):S.view===k;
   $('#nav').innerHTML=tabs.map(([k,l])=>`<button class="${on(k)?'on':''}" onclick="go('${k}')"><svg viewBox="0 0 24 24">${I[k]}</svg>${l}</button>`).join('');
-  $('#app').innerHTML=({home,trips,trip,tripForm,cal,bookForm,gal,me})[S.view]();$('#app').dataset.anim=S.anim?1:0;S.anim=0;
+  $('#app').innerHTML=({home,trips,trip,tripForm,cal,bookForm,gal,me,camper,docForm})[S.view]();$('#app').dataset.anim=S.anim?1:0;S.anim=0;
 }
 
 // ---------- Vistas ----------
 const coverOf=t=>{const p=S.photos.find(x=>x.trip_id===t.id);return p&&S.urls[p.path]?`url('${esc(S.urls[p.path])}')`:`url('${['scene-mountain.svg','scene-beach.svg','scene-forest.svg'][[...t.id].reduce((a,c)=>a+c.charCodeAt(0),0)%3]}')`};
-const tripCard=t=>{const c=coverOf(t);return `<div class="tc" onclick="go('trip','${t.id}')" style="${c?`background-image:linear-gradient(transparent 30%,#0b2438d9),${c}`:''}"><div class="tt">${esc(t.title)}</div><div class="ts">${esc(t.destination||'')}</div><div class="ts">${fmt(t.start_date)}</div><div class="tw">${dot(t.author)}</div></div>`};
+const tripCard=t=>{const c=coverOf(t);return `<div class="tc" onclick="go('trip','${t.id}')" style="${c?`background-image:linear-gradient(transparent 30%,#0b2438d9),${c}`:''}">${t.dogs?'<img class="dogb" src="perro.jpg" alt="Se admiten perros">':''}<div class="tt">${esc(t.title)}</div><div class="ts">${esc(t.destination||'')}</div><div class="ts">${fmt(t.start_date)}</div><div class="tw">${dot(t.author)}</div></div>`};
 const bkRow=b=>`<div class="card" style="border-left:6px solid ${who(b.user_id).color}"><div class="row"><div class="grow">${dot(b.user_id)}<div>${fmt(b.start_date)} → ${fmt(b.end_date)}</div>${b.note?`<div class="mute">${esc(b.note)}</div>`:''}</div><span class="tag ${b.status}">${b.status}</span></div>
 ${b.user_id===S.me.id&&b.status!=='cancelada'?`<div class="row" style="margin-top:10px">${b.status==='pendiente'?`<button class="btn sm" onclick="setBk('${b.id}','confirmada')">Confirmar</button>`:''}<button class="btn sm alt" onclick="go('bookForm','${b.id}')">Editar</button><button class="btn sm alt" onclick="setBk('${b.id}','cancelada')">Cancelar</button></div>`:''}</div>`;
 function home(){const today=iso(new Date());
   const act=S.bk.filter(b=>b.status!=='cancelada'&&b.end_date>=today),now=act.find(b=>b.start_date<=today),nx=act.find(b=>b.start_date>today);
   const dd=(a,b)=>Math.round((new Date(b+'T00:00')-new Date(a+'T00:00'))/864e5);
   const n=now?dd(today,now.end_date):nx?dd(today,nx.start_date):null,cl=now?'Vuelve en':nx?'Sale en':'Sin salidas';
-  return `<div class="hi rise" style="--i:0" onclick="go('me')"><div class="av" style="background:${S.me.color}">${esc(S.me.name[0])}</div><div><div class="mute">Hola</div><b style="font-size:19px">${esc(S.me.name)}</b></div></div>
+  return `<div class="hi rise" style="--i:0" onclick="go('me')">${avatar(S.me)}<div><div class="mute">Hola</div><b style="font-size:19px">${esc(S.me.name)}</b></div></div>
   <div class="hero rise" style="--i:1"><img class="hl" src="logo.png"><small>La camper ahora</small><div class="big">${now?'En ruta':'Libre'}</div><div class="nx">${now?`${esc(who(now.user_id).name)} la tiene hasta el ${fmt(now.end_date)}`:nx?`Próxima: ${esc(who(nx.user_id).name)}, desde el ${fmt(nx.start_date)}`:'Sin reservas próximas'}</div></div>
   <div class="bento"><button class="tile t1 rise" style="--i:2" onclick="go('tripForm')"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><b>Nuevo viaje</b></button>
   <div class="tile t2 rise" style="--i:3"><span>${cl}</span><span class="num">${n===null?'–':n}</span><span>${n===1?'día':'días'}</span></div>
   <button class="tile t3 rise" style="--i:4" onclick="go('bookForm')"><span>Elegir fechas</span><b>Reservar</b></button></div>
-  <h2>Últimos viajes</h2>${S.trips.length?`<div class="rail rise" style="--i:5">${S.trips.slice(0,6).map(tripCard).join('')}</div>`:'<p class="mute">Aún no hay viajes. Crea el primero.</p>'}
+  ${S.notes.some(n=>!n.done)?`<div class="card rise" style="--i:5;margin-top:14px" onclick="S.ctab='notes';go('camper')"><b>${S.notes.filter(n=>!n.done).length} cosas por preparar</b><div class="mute">Toca para ver las observaciones</div></div>`:''}<h2>Últimos viajes</h2>${S.trips.length?`<div class="rail rise" style="--i:5">${S.trips.slice(0,6).map(tripCard).join('')}</div>`:'<p class="mute">Aún no hay viajes. Crea el primero.</p>'}
   <h2>Próximas reservas</h2>${act.slice(0,3).map(bkRow).join('')||'<p class="mute">No hay reservas próximas.</p>'}
   ${S.photos.length?`<h2>Fotos recientes</h2><div class="grid">${S.photos.slice(0,6).map(p=>`<img src="${S.urls[p.path]||''}" onclick="lb('${p.id}')">`).join('')}</div>`:''}`}
 function trips(){const q=(S.q||'').toLowerCase(),f=S.from||'',t2=S.to||'';
@@ -152,14 +166,14 @@ function trips(){const q=(S.q||'').toLowerCase(),f=S.from||'',t2=S.to||'';
 window.filt=()=>{const p=document.activeElement,v=p.value;render();const i=$('#app input');i.focus();i.setSelectionRange(v.length,v.length)};
 function trip(){const t=S.trips.find(x=>x.id===S.arg);if(!t)return trips();
   const f=(l,v)=>v?`<label>${l}</label><pre>${esc(v)}</pre>`:'';const ph=S.photos.filter(p=>p.trip_id===t.id);
-  return `<div class="cover" style="${coverOf(t)?`background-image:linear-gradient(transparent 35%,#0b2438d9),${coverOf(t)}`:''}"><button class="back" onclick="go('trips')">‹</button><h1>${esc(t.title)}</h1></div><div class="mute">${esc(t.destination||'')} · ${fmt(t.start_date)} – ${fmt(t.end_date)}</div><div class="mute">Publicado por ${dot(t.author)}</div>
+  return `<div class="cover" style="${coverOf(t)?`background-image:linear-gradient(transparent 35%,#0b2438d9),${coverOf(t)}`:''}"><button class="back" onclick="go('trips')">‹</button>${t.dogs?'<img class="dogb" src="perro.jpg" alt="Se admiten perros">':''}<h1>${esc(t.title)}</h1></div><div class="mute">${esc(t.destination||'')} · ${fmt(t.start_date)} – ${fmt(t.end_date)}</div><div class="mute">Publicado por ${dot(t.author)}</div>${t.dogs?'<div style="margin:8px 0"><span class="tag confirmada">Se admiten perros</span></div>':''}
   <div class="card">${f('Descripción',t.description)}${f('Lugares visitados',t.places)}${f('Ruta',t.route)}${f('Lugares de pernocta',t.overnight)}${f('Consejos y recomendaciones',t.tips)}</div>
   <div class="row"><button class="btn grow" onclick="go('tripForm','${t.id}')">Editar / ampliar</button><label class="btn alt grow" style="text-align:center">📷 Subir fotos<input type="file" accept="image/*" multiple hidden onchange="upload(this.files,'${t.id}')"></label></div>
   <h2>Fotos</h2><div class="grid">${ph.map(p=>`<img src="${S.urls[p.path]||''}" onclick="lb('${p.id}')">`).join('')}</div>`}
 function tripForm(){const t=S.trips.find(x=>x.id===S.arg)||{};const i=(k,l,type='text')=>`<label>${l}</label><input id="f_${k}" type="${type}" value="${esc(t[k]||'')}">`,a=(k,l)=>`<label>${l}</label><textarea id="f_${k}" rows="3">${esc(t[k]||'')}</textarea>`;
-  return `<h1>${t.id?'Editar viaje':'Nuevo viaje'}</h1>${i('title','Nombre del viaje')}${i('destination','Destino')}<div class="row"><div class="grow">${i('start_date','Inicio','date')}</div><div class="grow">${i('end_date','Fin','date')}</div></div>${a('description','Descripción')}${a('places','Lugares visitados')}${a('route','Ruta realizada')}${a('overnight','Lugares de pernocta')}${a('tips','Recomendaciones y consejos')}<button class="btn" onclick="saveTrip('${t.id||''}')">Guardar viaje</button> <button class="btn alt" onclick="go('trips')">Cancelar</button>`}
+  return `<h1>${t.id?'Editar viaje':'Nuevo viaje'}</h1>${i('title','Nombre del viaje')}${i('destination','Destino')}<div class="row"><div class="grow">${i('start_date','Inicio','date')}</div><div class="grow">${i('end_date','Fin','date')}</div></div><label class="sw"><span>Se admiten perros</span><input type="checkbox" id="f_dogs" ${t.dogs?'checked':''}></label>${a('description','Descripción')}${a('places','Lugares visitados')}${a('route','Ruta realizada')}${a('overnight','Lugares de pernocta')}${a('tips','Recomendaciones y consejos')}<button class="btn" onclick="saveTrip('${t.id||''}')">Guardar viaje</button> <button class="btn alt" onclick="go('trips')">Cancelar</button>`}
 window.saveTrip=async id=>{const o={};['title','destination','start_date','end_date','description','places','route','overnight','tips'].forEach(k=>o[k]=$('#f_'+k).value||null);
-  if(!o.title)return toast('Pon un nombre al viaje');
+  o.dogs=$('#f_dogs').checked;if(!o.title)return toast('Pon un nombre al viaje');
   const {data,error}=id?await sb.from('trips').update(o).eq('id',id).select().single():await sb.from('trips').insert(o).select().single();
   if(error)return toast(error.message);await load();toast('Viaje guardado');go('trip',data.id)};
 
@@ -179,18 +193,43 @@ window.setBk=async(id,s)=>{const {error}=await sb.from('bookings').update({statu
 function gal(){return `<h1>Galería</h1><label class="btn" style="display:block;text-align:center">📷 Subir fotos<input type="file" accept="image/*" multiple hidden onchange="upload(this.files,null)"></label><br><div class="grid">${S.photos.map(p=>`<img src="${S.urls[p.path]||''}" onclick="lb('${p.id}')">`).join('')||'<p class="mute">Todavía no hay fotos.</p>'}</div>`}
 window.lb=id=>{const p=S.photos.find(x=>x.id===id),t=S.trips.find(x=>x.id===p.trip_id);$('#lb').innerHTML=`<img src="${S.urls[p.path]}"><p>${dot(p.author)} · ${fmt(p.created_at.slice(0,10))}${t?' · '+esc(t.title):''}</p>${p.author===S.me.id?`<button class="btn sm alt" onclick="event.stopPropagation();delPh('${p.id}')">Borrar foto</button>`:''}`;$('#lb').style.display='flex'};
 window.delPh=async id=>{const p=S.photos.find(x=>x.id===id);await sb.storage.from('photos').remove([p.path]);await sb.from('photos').delete().eq('id',id);$('#lb').style.display='none';await load();render()};
-function shrink(file){return new Promise(r=>{const im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(r,'image/jpeg',.8)};im.src=URL.createObjectURL(file)})}
+function shrink(file,max=1600,q=.8){return new Promise(r=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(r,'image/jpeg',q)};im.src=URL.createObjectURL(file)})}
 window.upload=async(files,tripId)=>{toast('Subiendo…');let ok=0;
   for(const f of files){const b=await shrink(f),path=`${S.me.id}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
     const u=await sb.storage.from('photos').upload(path,b,{contentType:'image/jpeg'});if(u.error){toast(u.error.message);continue}
     await sb.from('photos').insert({path,trip_id:tripId});ok++}
   await load();render();toast(`${ok} foto(s) subida(s)`)};
 
-function me(){return `<h1>Perfiles</h1>${Object.values(S.prof).map(p=>`<div class="card row"><div class="av" style="background:${p.color}">${esc(p.name[0])}</div><div class="grow"><b>${esc(p.name)}</b>${p.id===S.me.id?' (tú)':''}</div></div>`).join('')}
-  <div class="card"><label>Mi nombre</label><input id="pn" value="${esc(S.me.name)}" disabled><label>Mi color</label><input id="pc" type="color" value="${S.me.color}" style="height:48px"><button class="btn" onclick="saveMe()">Guardar perfil</button></div>
+function me(){return `<h1>Perfiles</h1>${Object.values(S.prof).map(p=>`<div class="card row">${avatar(p)}<div class="grow"><b>${esc(p.name)}</b>${p.id===S.me.id?' (tú)':''}</div></div>`).join('')}
+  <div class="card"><label>Mi foto</label><div class="row" style="margin:6px 0 14px">${avatar(S.me)}<label class="btn alt sm">Elegir foto<input type="file" accept="image/*" hidden onchange="setAvatar(this.files[0])"></label></div><label>Mi nombre</label><input id="pn" value="${esc(S.me.name)}" disabled><label>Mi color</label><input id="pc" type="color" value="${S.me.color}" style="height:48px"><button class="btn" onclick="saveMe()">Guardar perfil</button></div>
   <div class="card"><label>Cambiar mi PIN (6 dígitos)</label><input id="np" type="password" inputmode="numeric" maxlength="6"><button class="btn alt" onclick="chPin()">Cambiar PIN</button></div><button class="btn alt" onclick="logout()">Cerrar sesión</button>`}
 window.saveMe=async()=>{await sb.from('profiles').update({color:$('#pc').value}).eq('id',S.me.id);await load();S.me=S.prof[S.me.id];toast('Perfil guardado');render()};
 window.chPin=async()=>{const v=$('#np').value;if(!/^\d{6}$/.test(v))return toast('El PIN debe tener 6 dígitos');const {error}=await sb.auth.updateUser({password:v});toast(error?error.message:'PIN cambiado')};
+
+window.setAvatar=async f=>{if(!f)return;toast('Subiendo…');
+  const b=await new Promise(r=>{const im=new Image();im.onload=()=>{const m=Math.min(im.width,im.height),c=document.createElement('canvas');c.width=c.height=400;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,400,400);c.toBlob(r,'image/jpeg',.85)};im.src=URL.createObjectURL(f)});
+  const path=`${S.me.id}/${Date.now()}.jpg`,u=await sb.storage.from('avatars').upload(path,b,{contentType:'image/jpeg'});if(u.error)return toast(u.error.message);
+  const old=S.me.avatar,{error}=await sb.from('profiles').update({avatar:path}).eq('id',S.me.id);if(error)return toast(error.message);
+  if(old)sb.storage.from('avatars').remove([old]);await load();S.me=S.prof[S.me.id];toast('Foto cambiada');render()};
+const cats=['Homologación','Permiso de circulación','Ficha técnica','Seguro','ITV','Mantenimiento','Otros'],ncats=['Comprar','Revisar','Llevar','Otro'];
+function camper(){const t=S.ctab;
+  return `<h1>La camper</h1><div class="seg"><button class="${t==='docs'?'on':''}" onclick="S.ctab='docs';render()">Documentación</button><button class="${t==='notes'?'on':''}" onclick="S.ctab='notes';render()">Observaciones</button></div>${t==='docs'?docsView():notesView()}<p style="margin-top:28px"><button class="btn alt sm" onclick="go('me')">Mi perfil</button></p>`}
+function docsView(){const by={};S.docs.forEach(d=>(by[d.category]=by[d.category]||[]).push(d));
+  return `<button class="btn" style="width:100%" onclick="go('docForm')">Subir documento</button>`+(S.docs.length?cats.filter(c=>by[c]).map(c=>`<h2>${c}</h2>`+by[c].map(d=>`<div class="card row"><a class="grow doc" href="${esc(S.durls[d.path]||'#')}" target="_blank" rel="noopener"><b>${esc(d.title)}</b><div class="mute">${/pdf/.test(d.mime||'')?'PDF':'Imagen'}, ${esc(who(d.author).name)}, ${fmt(d.created_at.slice(0,10))}</div></a>${d.author===S.me.id?`<button class="btn sm alt" onclick="delDoc('${d.id}')">Borrar</button>`:''}</div>`).join('')).join(''):'<p class="mute" style="margin-top:16px">Aquí irán la homologación, el permiso de circulación, la ficha técnica y el seguro. Sube el primero.</p>')}
+function docForm(){return `<h1>Subir documento</h1><label>Tipo</label><select id="d_c">${cats.map(c=>`<option>${c}</option>`).join('')}</select><label>Nombre</label><input id="d_t" placeholder="Ej: Homologación de la camperización"><label>Archivo (PDF o foto)</label><input id="d_f" type="file" accept="application/pdf,image/*"><button class="btn" onclick="saveDoc()">Subir</button> <button class="btn alt" onclick="go('camper')">Cancelar</button>`}
+window.saveDoc=async()=>{const f=$('#d_f').files[0],t=$('#d_t').value.trim();
+  if(!f)return toast('Elige un archivo');if(!t)return toast('Ponle un nombre');
+  toast('Subiendo…');const pdf=f.type==='application/pdf',body=pdf?f:await shrink(f,2200,.85),path=`${S.me.id}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${pdf?'pdf':'jpg'}`;
+  const u=await sb.storage.from('docs').upload(path,body,{contentType:pdf?'application/pdf':'image/jpeg'});if(u.error)return toast(u.error.message);
+  const {error}=await sb.from('docs').insert({title:t,category:$('#d_c').value,path,mime:pdf?'application/pdf':'image/jpeg'});
+  if(error)return toast(error.message);await load();toast('Documento subido');go('camper')};
+window.delDoc=async id=>{if(!confirm('¿Borrar este documento?'))return;const d=S.docs.find(x=>x.id===id);await sb.storage.from('docs').remove([d.path]);await sb.from('docs').delete().eq('id',id);await load();render()};
+function notesView(){const p=S.notes.filter(n=>!n.done),d=S.notes.filter(n=>n.done);
+  const row=n=>`<div class="card row note ${n.done?'done':''}"><button class="chk ${n.done?'on':''}" onclick="togNote('${n.id}',${!n.done})">${n.done?'✓':''}</button><div class="grow"><div>${esc(n.text)}</div><div class="mute">${esc(n.category)}, ${esc(who(n.author).name)}</div></div>${n.author===S.me.id?`<button class="btn sm alt" onclick="delNote('${n.id}')">✕</button>`:''}</div>`;
+  return `<div class="card"><input id="n_t" placeholder="Anota algo que haga falta" style="margin-bottom:8px"><div class="row"><select id="n_c" style="flex:1;margin:0">${ncats.map(c=>`<option>${c}</option>`).join('')}</select><button class="btn" onclick="addNote()">Añadir</button></div></div>${p.map(row).join('')||'<p class="mute">Nada pendiente. Apunta lo que falte para los próximos viajes.</p>'}${d.length?`<h2>Hecho</h2>${d.map(row).join('')}`:''}`}
+window.addNote=async()=>{const t=$('#n_t').value.trim();if(!t)return toast('Escribe algo');const {error}=await sb.from('notes').insert({text:t,category:$('#n_c').value});if(error)return toast(error.message);await load();render()};
+window.togNote=async(id,v)=>{await sb.from('notes').update({done:v}).eq('id',id);await load();render()};
+window.delNote=async id=>{await sb.from('notes').delete().eq('id',id);await load();render()};
 
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
 boot();
