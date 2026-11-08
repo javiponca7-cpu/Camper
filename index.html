@@ -4,41 +4,78 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Camper">
-<meta name="theme-color" content="#5b6130">
+<meta name="theme-color" content="#eaf6fd">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Nuestra Camper</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
 <style>
-:root{--olive:#5b6130;--olive2:#434824;--beige:#e8dfc6;--paper:#faf7ef;--ink:#2b2a22;--mute:#7a765f;--line:#ddd3b6}
+:root{--sky:#cdebfa;--blue:#2a86cf;--deep:#12324a;--paper:#f4faff;--sun:#ffd27a;--ink:#10283b;--mute:#5f7a8d;--line:#d3e6f2;--glass:rgba(255,255,255,.66)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.45 -apple-system,system-ui,sans-serif;padding:env(safe-area-inset-top) 0 calc(76px + env(safe-area-inset-bottom))}
-main{max-width:640px;margin:0 auto;padding:16px}
-h1,h2{font-family:Fraunces,Georgia,serif;margin:0 0 12px;color:var(--olive2)}
-h1{font-size:30px}h2{font-size:21px;margin-top:24px}
-.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px}
-.btn{background:var(--olive);color:#fff;border:0;border-radius:12px;padding:12px 18px;font:600 16px inherit;font-family:inherit;min-height:46px}
-.btn.alt{background:var(--beige);color:var(--olive2)}.btn.sm{padding:6px 12px;min-height:34px;font-size:14px}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.grow{flex:1}
-input,textarea,select{width:100%;font:inherit;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:4px 0 10px}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 -apple-system,system-ui,sans-serif;padding:env(safe-area-inset-top) 0 calc(108px + env(safe-area-inset-bottom))}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(120% 55% at 100% -10%,#bfe4f8,transparent 62%),radial-gradient(80% 45% at -10% 8%,#e1f3ff,transparent 58%)}
+main{max-width:640px;margin:0 auto;padding:18px 16px}
+h1,h2,.big,.num,.tt,.tile b{font-family:"Bricolage Grotesque",-apple-system,system-ui,sans-serif}
+h1{font-size:36px;font-weight:800;line-height:1.05;letter-spacing:-1px;color:var(--deep);margin:0 0 8px}
+h2{font-size:23px;font-weight:800;letter-spacing:-.5px;color:var(--deep);margin:30px 0 12px}
+.card{background:var(--glass);backdrop-filter:blur(18px) saturate(170%);-webkit-backdrop-filter:blur(18px) saturate(170%);border:1px solid #fff;border-radius:24px;padding:16px;margin-bottom:12px;box-shadow:0 10px 30px -18px #2a86cf66}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:99px;padding:14px 24px;min-height:50px;font-size:16px;font-weight:700;font-family:inherit;box-shadow:0 10px 22px -10px #2a86cfcc;transition:transform .15s cubic-bezier(.3,1.6,.5,1)}
+.btn:active{transform:scale(.95)}
+.btn.alt{background:#fff;color:var(--blue);box-shadow:0 6px 16px -10px #2a86cf88}.btn.sm{padding:8px 16px;min-height:38px;font-size:14px;box-shadow:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.grow{flex:1}
+input,textarea,select{width:100%;font:inherit;padding:14px 16px;border:1.5px solid var(--line);border-radius:18px;background:#ffffffcc;margin:4px 0 12px;outline:none}
+input:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px #2a86cf22}
 label{font-size:14px;color:var(--mute)}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--olive2);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
-nav button{flex:1;background:none;border:0;color:#cfd2b0;font:13px inherit;font-family:inherit;padding:6px 0}
-nav button.on{color:#fff;font-weight:700}nav span{display:block;font-size:22px}
-.dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle;margin-right:6px}
-.av{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 22px Fraunces,serif}
-.profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:center}
-.profiles button{background:none;border:0;font:inherit;display:flex;flex-direction:column;align-items:center;gap:6px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}.grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px}
-.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:13px}
-.cal b{color:var(--mute);font-weight:500}.cal div{min-height:48px;border-radius:8px;background:#fff;border:1px solid var(--line);padding:2px;overflow:hidden}
-.cal i{display:block;height:6px;border-radius:3px;margin-top:2px}.cal .x{background:none;border:0}
-.tag{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--beige)}.tag.confirmada{background:#cfe0b4}.tag.cancelada{background:#e8c4bd;text-decoration:line-through}
-#lb{position:fixed;inset:0;background:#000d;display:none;flex-direction:column;justify-content:center;align-items:center;color:#fff;z-index:9;padding:16px}
-#lb img{max-width:100%;max-height:78vh;border-radius:8px}
-#toast{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;display:none;z-index:10}
-.mute{color:var(--mute);font-size:14px}pre{white-space:pre-wrap;font:inherit;margin:4px 0 10px}
-</style></head><body>
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:min(92vw,480px);display:flex;gap:2px;padding:6px;background:rgba(255,255,255,.55);backdrop-filter:blur(22px) saturate(190%);-webkit-backdrop-filter:blur(22px) saturate(190%);border:1px solid #ffffffcc;border-radius:34px;box-shadow:0 14px 34px -12px #12324a66,inset 0 1px 0 #fff;z-index:5}
+nav:empty{display:none}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;border-radius:28px;padding:9px 0 7px;color:var(--mute);font-size:11px;font-weight:700;font-family:inherit;transition:background .25s,color .25s}
+nav button.on{background:var(--blue);color:#fff;box-shadow:0 8px 18px -8px #2a86cf}
+nav svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.av{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:#fff;font:800 20px "Bricolage Grotesque",sans-serif;flex:none;box-shadow:0 0 0 3px #fff}
+.av.big{width:84px;height:84px;font-size:34px}
+.hi{display:flex;align-items:center;gap:12px}
+.hero{position:relative;overflow:hidden;min-height:250px;border-radius:36px;padding:22px;margin:16px 0;color:var(--deep);background:var(--sky) url(scene-mountain.svg) right bottom/cover;display:flex;flex-direction:column;box-shadow:0 22px 40px -22px #2a86cf}
+.hero small{font-weight:700;font-size:14px}.hero .big{font-size:60px;font-weight:800;line-height:.95;letter-spacing:-2px;margin:6px 0 auto}
+.hero .nx{align-self:flex-start;font-size:14px;font-weight:600;padding:10px 14px;border-radius:18px;background:rgba(255,255,255,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin-top:18px}
+.hl{position:absolute;top:16px;right:16px;width:72px;opacity:.92}
+.bento{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 4px}
+.tile{border:0;border-radius:30px;padding:16px;min-height:118px;text-align:left;font-family:inherit;display:flex;flex-direction:column;justify-content:space-between;color:var(--deep);font-size:14px;font-weight:600}
+.tile b{font-size:21px;font-weight:800;line-height:1.05;letter-spacing:-.5px}
+.t1{background:var(--blue);color:#fff;grid-row:span 2;box-shadow:0 18px 30px -16px #2a86cf}.t2{background:var(--sun)}.t3{background:#fff;border:1px solid var(--line)}
+.num{font-size:44px;font-weight:800;line-height:1;letter-spacing:-2px}
+.rail{display:flex;gap:12px;overflow-x:auto;margin:0 -16px;padding:2px 16px 10px;scroll-snap-type:x mandatory;scrollbar-width:none}.rail::-webkit-scrollbar{display:none}
+.tc{flex:0 0 74%;max-width:300px;scroll-snap-align:start;aspect-ratio:4/5;border-radius:30px;background:var(--blue) center/cover;color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 16px 28px -18px #12324a}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.tgrid .tc{max-width:none;aspect-ratio:3/4}
+.tt{font-size:22px;font-weight:800;line-height:1.05;letter-spacing:-.5px}.ts{font-size:13px;opacity:.9;margin-top:2px}.tw{font-size:13px;margin-top:6px}
+.cover{margin:-18px -16px 18px;min-height:300px;background:var(--blue) center/cover;border-radius:0 0 40px 40px;padding:20px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;color:#fff}
+.cover h1{color:#fff;font-size:38px;margin:0}
+.back{position:absolute;top:14px;left:14px;width:44px;height:44px;border-radius:50%;border:1px solid #fff;background:#ffffffb8;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font-size:26px;line-height:1;color:var(--deep)}
+.lg{text-align:center;margin-top:-18px;position:relative}.lg.pn{padding-top:56px;margin-top:0}
+.banner{height:210px;margin:0 -16px;background:var(--sky) url(scene-mountain.svg) center 62%/cover;border-radius:0 0 44px 44px}
+.badge{width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid #fff;display:grid;place-items:center;margin:-60px auto 12px;position:relative;box-shadow:0 14px 30px -14px #12324a}.badge img{width:96px;height:96px;object-fit:contain}
+.profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:24px 12px;margin-top:28px}
+.profiles button{background:none;border:0;font:inherit;font-weight:700;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:8px}
+.dots{display:flex;gap:14px;justify-content:center;margin:20px 0 28px}.dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--blue);transition:background .15s,transform .15s}.dots i.on{background:var(--blue);transform:scale(1.15)}
+.pad{display:grid;grid-template-columns:repeat(3,78px);gap:14px;justify-content:center}
+.pad button{height:78px;border-radius:50%;border:1px solid #fff;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font:800 28px "Bricolage Grotesque",sans-serif;color:var(--deep);box-shadow:0 8px 18px -10px #2a86cf99}.pad button:active{background:var(--sky)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:20px}
+.grid img:first-child{grid-column:span 2;grid-row:span 2;height:100%}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:13px;font-weight:600}
+.cal b{color:var(--mute);font-weight:600;padding:4px 0}
+.cal div{min-height:54px;border-radius:16px;background:var(--glass);border:1px solid #fff;padding:5px 3px;overflow:hidden}
+.cal div.today{background:var(--blue);color:#fff;border-color:var(--blue)}.cal .x{background:none;border:0}
+.cal i{display:block;height:7px;border-radius:4px;margin-top:3px}
+.tag{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;background:var(--sky);color:var(--deep)}.tag.confirmada{background:#bdf0dc}.tag.cancelada{background:#ffd3d3;text-decoration:line-through}
+#lb{position:fixed;inset:0;background:#06182ae6;backdrop-filter:blur(10px);display:none;flex-direction:column;justify-content:center;align-items:center;color:#fff;z-index:9;padding:16px}
+#lb img{max-width:100%;max-height:78vh;border-radius:24px}
+#toast{position:fixed;top:calc(12px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:var(--deep);color:#fff;padding:11px 18px;border-radius:99px;display:none;z-index:10;max-width:90vw;font-weight:600}
+.mute{color:var(--mute);font-size:14px}pre{white-space:pre-wrap;font:inherit;margin:4px 0 12px}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.96)}}
+main[data-anim="1"] .rise{animation:rise .6s cubic-bezier(.2,.9,.25,1) both;animation-delay:calc(var(--i,0)*70ms)}
+@media (prefers-reduced-motion:reduce){main[data-anim="1"] .rise{animation:none}}
+</style>
+</head><body>
 <main id="app"></main><nav id="nav"></nav>
 <div id="lb" onclick="this.style.display='none'"></div><div id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js"></script>
@@ -57,15 +94,17 @@ const dot=id=>`<span class="dot" style="background:${who(id).color}"></span>${es
 
 // ---------- Acceso: perfil + PIN (por debajo es Supabase Auth: email interno + PIN como contraseña) ----------
 async function login(){
-  const {data:ps}=await sb.from('profiles').select('*').order('created_at');
+  const {data:ps}=await sb.from('profiles').select('*').order('created_at');window._ps=ps||[];
   $('#nav').innerHTML='';
-  $('#app').innerHTML=`<h1>Nuestra Camper</h1><p class="mute">¿Quién eres?</p><div class="profiles">${(ps||[]).map(p=>`<button onclick="pin('${p.id}')"><div class="av" style="background:${p.color}">${esc(p.name[0])}</div>${esc(p.name)}</button>`).join('')}</div><div id="pinbox"></div>`;
-  window._ps=ps;
+  $('#app').innerHTML=`<div class="lg"><div class="banner"></div><div class="badge"><img src="logo.png"></div><h1>Nuestra Camper</h1><p class="mute">¿Quién viaja hoy?</p><div class="profiles">${_ps.map(p=>`<button onclick="pin('${p.id}')"><div class="av big" style="background:${p.color}">${esc(p.name[0])}</div>${esc(p.name)}</button>`).join('')}</div></div>`;
 }
-window.pin=id=>{const p=_ps.find(x=>x.id===id);
-  $('#pinbox').innerHTML=`<div class="card" style="margin-top:20px"><label>PIN de ${esc(p.name)} (6 dígitos)</label><input id="pin" type="password" inputmode="numeric" maxlength="6" autofocus><button class="btn" style="width:100%" onclick="doLogin('${esc(p.name.toLowerCase())}')">Entrar</button></div>`};
-window.doLogin=async n=>{const {error}=await sb.auth.signInWithPassword({email:`${n}@camper.local`,password:$('#pin').value});
-  if(error)return toast('PIN incorrecto');boot()};
+window.pin=id=>{window._pid=id;window._pv='';const p=_ps.find(x=>x.id===id);
+  $('#app').innerHTML=`<div class="lg pn"><button class="back" onclick="login()">‹</button><div class="av big" style="background:${p.color};margin:0 auto 10px">${esc(p.name[0])}</div><h1>${esc(p.name)}</h1><p class="mute">Escribe tu PIN</p><div class="dots" id="dots">${'<i></i>'.repeat(6)}</div><div class="pad">${[1,2,3,4,5,6,7,8,9,'',0,'⌫'].map(k=>`<button ${k===''?'disabled style="visibility:hidden"':''} onclick="key('${k}')">${k}</button>`).join('')}</div></div>`};
+window.key=async k=>{if(k==='⌫')_pv=_pv.slice(0,-1);else if(_pv.length<6)_pv+=k;
+  const ds=document.querySelectorAll('#dots i');ds.forEach((d,i)=>d.classList.toggle('on',i<_pv.length));
+  if(_pv.length===6){const p=_ps.find(x=>x.id===_pid);
+    const {error}=await sb.auth.signInWithPassword({email:`${p.name.toLowerCase()}@camper.local`,password:_pv});
+    if(error){toast('PIN incorrecto');_pv='';ds.forEach(d=>d.classList.remove('on'))}else boot()}};
 window.logout=async()=>{await sb.auth.signOut();location.reload()};
 
 // ---------- Datos y tiempo real ----------
@@ -77,33 +116,43 @@ async function load(){
 }
 async function boot(){
   const {data:{session}}=await sb.auth.getSession();if(!session)return login();
-  await load();S.me=S.prof[session.user.id];if(!S.me)return login();
+  await load();S.me=S.prof[session.user.id];if(!S.me)return login();S.anim=1;
   sb.channel('c').on('postgres_changes',{event:'*',schema:'public'},async()=>{await load();if(!document.activeElement?.matches('input,textarea,select'))render()}).subscribe();
   render();
 }
-window.go=(v,a=null)=>{S.view=v;S.arg=a;render();scrollTo(0,0)};
+window.go=(v,a=null)=>{S.view=v;S.arg=a;S.anim=1;render();scrollTo(0,0)};
 function render(){
-  const tabs=[['home','🏠','Inicio'],['trips','🧭','Viajes'],['cal','📅','Calendario'],['gal','🖼️','Galería'],['me','👤','Perfil']];
-  $('#nav').innerHTML=tabs.map(([k,i,l])=>`<button class="${S.view.startsWith(k)?'on':''}" onclick="go('${k}')"><span>${i}</span>${l}</button>`).join('');
-  $('#app').innerHTML=({home,trips,trip,tripForm,cal,bookForm,gal,me})[S.view]();
+  const I={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',trips:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',gal:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M4 18l5-5 4 4 3-3 4 4"/>',me:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>'};
+  const tabs=[['home','Inicio'],['trips','Viajes'],['cal','Calendario'],['gal','Galería'],['me','Perfil']];
+  const on=k=>k==='cal'?['cal','bookForm'].includes(S.view):k==='trips'?['trips','trip','tripForm'].includes(S.view):S.view===k;
+  $('#nav').innerHTML=tabs.map(([k,l])=>`<button class="${on(k)?'on':''}" onclick="go('${k}')"><svg viewBox="0 0 24 24">${I[k]}</svg>${l}</button>`).join('');
+  $('#app').innerHTML=({home,trips,trip,tripForm,cal,bookForm,gal,me})[S.view]();$('#app').dataset.anim=S.anim?1:0;S.anim=0;
 }
 
 // ---------- Vistas ----------
-const tripCard=t=>`<div class="card" onclick="go('trip','${t.id}')"><b>${esc(t.title)}</b><div class="mute">${esc(t.destination||'')} · ${fmt(t.start_date)}</div><div class="mute">${dot(t.author)}</div></div>`;
-const bkRow=b=>`<div class="card"><div class="row"><div class="grow">${dot(b.user_id)}<div>${fmt(b.start_date)} → ${fmt(b.end_date)}</div>${b.note?`<div class="mute">${esc(b.note)}</div>`:''}</div><span class="tag ${b.status}">${b.status}</span></div>
-${b.user_id===S.me.id&&b.status!=='cancelada'?`<div class="row" style="margin-top:8px">${b.status==='pendiente'?`<button class="btn sm" onclick="setBk('${b.id}','confirmada')">Confirmar</button>`:''}<button class="btn sm alt" onclick="go('bookForm','${b.id}')">Editar</button><button class="btn sm alt" onclick="setBk('${b.id}','cancelada')">Cancelar</button></div>`:''}</div>`;
+const coverOf=t=>{const p=S.photos.find(x=>x.trip_id===t.id);return p&&S.urls[p.path]?`url('${esc(S.urls[p.path])}')`:`url('${['scene-mountain.svg','scene-beach.svg','scene-forest.svg'][[...t.id].reduce((a,c)=>a+c.charCodeAt(0),0)%3]}')`};
+const tripCard=t=>{const c=coverOf(t);return `<div class="tc" onclick="go('trip','${t.id}')" style="${c?`background-image:linear-gradient(transparent 30%,#0b2438d9),${c}`:''}"><div class="tt">${esc(t.title)}</div><div class="ts">${esc(t.destination||'')}</div><div class="ts">${fmt(t.start_date)}</div><div class="tw">${dot(t.author)}</div></div>`};
+const bkRow=b=>`<div class="card" style="border-left:6px solid ${who(b.user_id).color}"><div class="row"><div class="grow">${dot(b.user_id)}<div>${fmt(b.start_date)} → ${fmt(b.end_date)}</div>${b.note?`<div class="mute">${esc(b.note)}</div>`:''}</div><span class="tag ${b.status}">${b.status}</span></div>
+${b.user_id===S.me.id&&b.status!=='cancelada'?`<div class="row" style="margin-top:10px">${b.status==='pendiente'?`<button class="btn sm" onclick="setBk('${b.id}','confirmada')">Confirmar</button>`:''}<button class="btn sm alt" onclick="go('bookForm','${b.id}')">Editar</button><button class="btn sm alt" onclick="setBk('${b.id}','cancelada')">Cancelar</button></div>`:''}</div>`;
 function home(){const today=iso(new Date());
-  return `<h1>Hola, ${esc(S.me.name)}</h1><div class="row"><button class="btn grow" onclick="go('tripForm')">＋ Nuevo viaje</button><button class="btn alt grow" onclick="go('bookForm')">Reservar</button></div>
-  <h2>Próximas reservas</h2>${S.bk.filter(b=>b.end_date>=today&&b.status!=='cancelada').slice(0,3).map(bkRow).join('')||'<p class="mute">No hay reservas próximas. Reserva la camper desde el calendario.</p>'}
-  <h2>Últimos viajes</h2>${S.trips.slice(0,3).map(tripCard).join('')||'<p class="mute">Aún no hay viajes. Crea el primero.</p>'}
-  <h2>Últimas fotos</h2><div class="grid">${S.photos.slice(0,6).map(p=>`<img src="${S.urls[p.path]||''}" onclick="lb('${p.id}')">`).join('')}</div>`}
+  const act=S.bk.filter(b=>b.status!=='cancelada'&&b.end_date>=today),now=act.find(b=>b.start_date<=today),nx=act.find(b=>b.start_date>today);
+  const dd=(a,b)=>Math.round((new Date(b+'T00:00')-new Date(a+'T00:00'))/864e5);
+  const n=now?dd(today,now.end_date):nx?dd(today,nx.start_date):null,cl=now?'Vuelve en':nx?'Sale en':'Sin salidas';
+  return `<div class="hi rise" style="--i:0" onclick="go('me')"><div class="av" style="background:${S.me.color}">${esc(S.me.name[0])}</div><div><div class="mute">Hola</div><b style="font-size:19px">${esc(S.me.name)}</b></div></div>
+  <div class="hero rise" style="--i:1"><img class="hl" src="logo.png"><small>La camper ahora</small><div class="big">${now?'En ruta':'Libre'}</div><div class="nx">${now?`${esc(who(now.user_id).name)} la tiene hasta el ${fmt(now.end_date)}`:nx?`Próxima: ${esc(who(nx.user_id).name)}, desde el ${fmt(nx.start_date)}`:'Sin reservas próximas'}</div></div>
+  <div class="bento"><button class="tile t1 rise" style="--i:2" onclick="go('tripForm')"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><b>Nuevo viaje</b></button>
+  <div class="tile t2 rise" style="--i:3"><span>${cl}</span><span class="num">${n===null?'–':n}</span><span>${n===1?'día':'días'}</span></div>
+  <button class="tile t3 rise" style="--i:4" onclick="go('bookForm')"><span>Elegir fechas</span><b>Reservar</b></button></div>
+  <h2>Últimos viajes</h2>${S.trips.length?`<div class="rail rise" style="--i:5">${S.trips.slice(0,6).map(tripCard).join('')}</div>`:'<p class="mute">Aún no hay viajes. Crea el primero.</p>'}
+  <h2>Próximas reservas</h2>${act.slice(0,3).map(bkRow).join('')||'<p class="mute">No hay reservas próximas.</p>'}
+  ${S.photos.length?`<h2>Fotos recientes</h2><div class="grid">${S.photos.slice(0,6).map(p=>`<img src="${S.urls[p.path]||''}" onclick="lb('${p.id}')">`).join('')}</div>`:''}`}
 function trips(){const q=(S.q||'').toLowerCase(),f=S.from||'',t2=S.to||'';
   const l=S.trips.filter(t=>(!q||(t.title+t.destination).toLowerCase().includes(q))&&(!f||t.end_date>=f)&&(!t2||t.start_date<=t2));
-  return `<h1>Viajes</h1><input placeholder="Buscar por nombre o destino" value="${esc(S.q||'')}" oninput="S.q=this.value;filt()"><div class="row"><div class="grow"><label>Desde</label><input type="date" value="${f}" onchange="S.from=this.value;render()"></div><div class="grow"><label>Hasta</label><input type="date" value="${t2}" onchange="S.to=this.value;render()"></div></div><div id="tl">${l.map(tripCard).join('')||'<p class="mute">Sin resultados.</p>'}</div><button class="btn" onclick="go('tripForm')">＋ Nuevo viaje</button>`}
+  return `<h1>Viajes</h1><input placeholder="Buscar por nombre o destino" value="${esc(S.q||'')}" oninput="S.q=this.value;filt()"><div class="row"><div class="grow"><label>Desde</label><input type="date" value="${f}" onchange="S.from=this.value;render()"></div><div class="grow"><label>Hasta</label><input type="date" value="${t2}" onchange="S.to=this.value;render()"></div></div><div id="tl" class="tgrid">${l.map(tripCard).join('')||'<p class="mute">Sin resultados.</p>'}</div><button class="btn" onclick="go('tripForm')">＋ Nuevo viaje</button>`}
 window.filt=()=>{const p=document.activeElement,v=p.value;render();const i=$('#app input');i.focus();i.setSelectionRange(v.length,v.length)};
 function trip(){const t=S.trips.find(x=>x.id===S.arg);if(!t)return trips();
   const f=(l,v)=>v?`<label>${l}</label><pre>${esc(v)}</pre>`:'';const ph=S.photos.filter(p=>p.trip_id===t.id);
-  return `<button class="btn sm alt" onclick="go('trips')">‹ Viajes</button><h1 style="margin-top:12px">${esc(t.title)}</h1><div class="mute">${esc(t.destination||'')} · ${fmt(t.start_date)} – ${fmt(t.end_date)}</div><div class="mute">Publicado por ${dot(t.author)}</div>
+  return `<div class="cover" style="${coverOf(t)?`background-image:linear-gradient(transparent 35%,#0b2438d9),${coverOf(t)}`:''}"><button class="back" onclick="go('trips')">‹</button><h1>${esc(t.title)}</h1></div><div class="mute">${esc(t.destination||'')} · ${fmt(t.start_date)} – ${fmt(t.end_date)}</div><div class="mute">Publicado por ${dot(t.author)}</div>
   <div class="card">${f('Descripción',t.description)}${f('Lugares visitados',t.places)}${f('Ruta',t.route)}${f('Lugares de pernocta',t.overnight)}${f('Consejos y recomendaciones',t.tips)}</div>
   <div class="row"><button class="btn grow" onclick="go('tripForm','${t.id}')">Editar / ampliar</button><label class="btn alt grow" style="text-align:center">📷 Subir fotos<input type="file" accept="image/*" multiple hidden onchange="upload(this.files,'${t.id}')"></label></div>
   <h2>Fotos</h2><div class="grid">${ph.map(p=>`<img src="${S.urls[p.path]||''}" onclick="lb('${p.id}')">`).join('')}</div>`}
@@ -116,7 +165,7 @@ window.saveTrip=async id=>{const o={};['title','destination','start_date','end_d
 
 function cal(){const y=S.month.getFullYear(),m=S.month.getMonth(),first=new Date(y,m,1),off=(first.getDay()+6)%7,n=new Date(y,m+1,0).getDate();
   const cells=['L','M','X','J','V','S','D'].map(d=>`<b>${d}</b>`);for(let i=0;i<off;i++)cells.push('<div class="x"></div>');
-  for(let d=1;d<=n;d++){const k=iso(new Date(y,m,d));cells.push(`<div>${d}${S.bk.filter(b=>b.status!=='cancelada'&&b.start_date<=k&&b.end_date>=k).map(b=>`<i style="background:${who(b.user_id).color};opacity:${b.status==='pendiente'?.5:1}"></i>`).join('')}</div>`)}
+  for(let d=1;d<=n;d++){const k=iso(new Date(y,m,d));cells.push(`<div class="${k===iso(new Date())?'today':''}">${d}${S.bk.filter(b=>b.status!=='cancelada'&&b.start_date<=k&&b.end_date>=k).map(b=>`<i style="background:${who(b.user_id).color};opacity:${b.status==='pendiente'?.5:1}"></i>`).join('')}</div>`)}
   const ms=iso(first),me_=iso(new Date(y,m+1,0));
   return `<h1>Calendario</h1><div class="row"><button class="btn sm alt" onclick="S.month=new Date(${y},${m-1},1);render()">‹</button><b class="grow" style="text-align:center">${first.toLocaleDateString('es-ES',{month:'long',year:'numeric'})}</b><button class="btn sm alt" onclick="S.month=new Date(${y},${m+1},1);render()">›</button></div><br><div class="cal">${cells.join('')}</div><p class="mute">Color más claro = pendiente.</p><button class="btn" style="width:100%" onclick="go('bookForm')">＋ Nueva reserva</button><h2>Reservas del mes</h2>${S.bk.filter(b=>b.start_date<=me_&&b.end_date>=ms).map(bkRow).join('')||'<p class="mute">Sin reservas este mes.</p>'}`}
 function bookForm(){const b=S.bk.find(x=>x.id===S.arg)||{};
